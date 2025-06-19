@@ -4,51 +4,30 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import '../models/weather_model.dart';
 
 class WeatherService {
-  static const String _baseUrl = 'https://api.openweathermap.org/data/2.5';
+  static const String _baseUrl =
+      'https://api.openweathermap.org/data/2.5/weather';
 
-  String get _apiKey {
-    return dotenv.env['OPENWEATHER_API_KEY'] ?? 'SUA_API_KEY_AQUI';
-  }
+  Future<Weather> getWeather(String cityName) async {
+    final apiKey = dotenv.env['OPENWEATHER_API_KEY'];
 
-  Future<WeatherModel> getWeatherByCity(String city) async {
-    try {
-      final response = await http.get(
-        Uri.parse(
-          '$_baseUrl/weather?q=$city&appid=$_apiKey&units=metric&lang=pt_br',
-        ),
-      );
+    if (apiKey == null) {
+      throw Exception('Chave de api não encontrada no arquivo .env');
+    }
 
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        return WeatherModel.fromJson(data);
-      } else {
-        throw Exception(
-          'Falha ao carregar dados do clima: ${response.statusCode}',
-        );
-      }
-    } catch (e) {
-      throw Exception('Erro na conexão: $e');
+    final response = await http.get(
+      Uri.parse('$_baseUrl?q=$cityName&appid=$apiKey&units=metric&lang=pt_br'),
+    );
+
+    if (response.statusCode == 200) {
+      return Weather.fromJson(jsonDecode(response.body));
+    } else if (response.statusCode == 404) {
+      throw Exception('Cidade não encontrada!');
+    } else {
+      throw Exception('Erro ao buscar dados do clima!');
     }
   }
 
-  Future<WeatherModel> getWeatherByLocation(double lat, double lon) async {
-    try {
-      final response = await http.get(
-        Uri.parse(
-          '$_baseUrl/weather?lat=$lat&lon=$lon&appid=$_apiKey&units=metric&lang=pt_br',
-        ),
-      );
-
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
-        return WeatherModel.fromJson(data);
-      } else {
-        throw Exception(
-          'Falha ao carregar dados do clima: ${response.statusCode}',
-        );
-      }
-    } catch (e) {
-      throw Exception('Erro na conexão: $e');
-    }
+  static String getIconUrl(String iconCode) {
+    return 'https://openweathermap.org/img/wn/$iconCode@4x.png';
   }
 }
