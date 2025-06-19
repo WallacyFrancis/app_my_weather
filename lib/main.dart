@@ -24,7 +24,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         brightness: Brightness.dark,
         primarySwatch: Colors.blue,
-        scaffoldBackgroundColor: const Color.fromARGB(255, 87, 87, 87),
+        scaffoldBackgroundColor: Colors.grey[900],
       ),
       // 1. Injetando o BLoC
       // O BlocProvider cria uma instância do WeatherBloc e a torna disponível

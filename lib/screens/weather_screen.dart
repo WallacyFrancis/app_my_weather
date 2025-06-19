@@ -13,7 +13,45 @@ class WeatherScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Previsão do tempo com BLoC'),
+        toolbarHeight: 120, // Aumentando a altura do AppBar
+        backgroundColor: Colors.blue.shade700,
+        elevation: 8,
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Texto pequeno na parte superior
+            Text(
+              'Previsão do tempo com BLoC',
+              style: TextStyle(
+                fontSize: 12,
+                color: Colors.white.withValues(alpha: 0.8),
+                fontWeight: FontWeight.w300,
+              ),
+            ),
+            const SizedBox(height: 8),
+            // Ícone de clima
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.sunny, size: 32, color: Colors.yellow.shade300),
+                const SizedBox(width: 10),
+                const Text(
+                  'Saiba o clima de qualquer cidade do mundo',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.white,
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+              ],
+            ),
+            // const SizedBox(height: 8),
+            // Texto descritivo
+          ],
+        ),
         centerTitle: true,
       ),
       body: Padding(
